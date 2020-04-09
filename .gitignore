@@ -1,3 +1,8 @@
 venv/
 .idea
 db.sqlite3
+purebeurre/forms/__pycache__/
+purebeurre/migrations/__pycache__/
+purebeurre/views/__pycache__/
+P08_PureBeurre/__pycache__/
+purebeurre/__pycache__/
