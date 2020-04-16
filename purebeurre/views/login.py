@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.views.generic.base import RedirectView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from purebeurre.forms.login import SignUpForm, LogInForm
 from django.views.generic.edit import FormView
 
@@ -8,6 +9,7 @@ from django.views.generic.edit import FormView
 class SignUpFormView(FormView):
     form_class = SignUpForm
     template_name = 'pure_beurre/form.html'
+    success_url = '/login/'
 
     def get_context_data(self, **kwargs):
         context = super(SignUpFormView, self).get_context_data(**kwargs)
@@ -30,7 +32,7 @@ class SignUpFormView(FormView):
         else:
             context['error'] = 'The two password are not identical'
 
-        return render(request=self.request, template_name=self.template_name, context=context)
+        return super().form_valid(form)
 
 
 class LogInFormView(FormView):
@@ -47,10 +49,17 @@ class LogInFormView(FormView):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
 
-        context = self.get_context_data()
-
         user = authenticate(self.request, username=username, password=password)
         if user is not None:
             login(self.request, user)
 
-        return render(request=self.request, template_name=self.template_name, context=context)
+        return super().form_valid(form)
+
+
+class LogOutView(LoginRequiredMixin, RedirectView):
+    login_url = '/login/'
+    pattern_name = 'home'
+
+    def get_redirect_url(self, *args, **kwargs):
+        logout(self.request)
+        return super().get_redirect_url(*args, **kwargs)

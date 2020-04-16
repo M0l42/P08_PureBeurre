@@ -1,0 +1,102 @@
+{% extends 'pure_beurre/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+
+    <section class="text-center mb-4">
+
+        <!--Grid row-->
+        <div class="row wow fadeIn">
+
+          {% for object in object_list %}
+              {% autoescape off %}
+                {% if object.product %}
+                    <div id="{{ object.id }}_{{ object.product.id }}" style="width: 500px; height: 300px; overflow: auto">
+                        <div style="float: left; width: 210px; height: 210px">
+                            <img class="image"
+                                 src={{ object.product.img_url }}>
+                        </div>
+                        <h3>Product :<a target="_blank" href="{{ object.product.url }}"></br>{{object.product.name}}</a></h3>
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>grade : {{ object.product.nutrition_grade }}</strong>
+                        </h4>
+                        <h4 class="font-weight-bold grey-text">
+                            <strong>code : {{ object.product.code }}</strong>
+                        </h4>
+                        <a href="{% url 'sort_favorite' object.category.tags %}" class="grey-text nav-link">
+                            <h5>{{ object.product.category }}</h5>
+                        </a>
+                    </div>
+
+                    <div id="{{ object.id }}_{{ object.substitute.id }}" style="width: 500px; height: 300px; overflow: auto">
+                        <div style="float: left; width: 210px; height: 210px">
+                            <img class="image"
+                                 src={{ object.substitute.img_url }}>
+                        </div>
+                        <h3>Substitute :<a target="_blank" href="{{ object.substitute.url }}"></br>{{object.substitute.name}}</a></h3>
+                        <h4 class="font-weight-bold blue-text">
+                            <strong>grade : {{ object.substitute.nutrition_grade }}</strong>
+                        </h4>
+                        <h4 class="font-weight-bold grey-text">
+                            <strong>code : {{ object.substitute.code }}</strong>
+                        </h4>
+                        <a href="{% url 'sort_favorite' object.category.tags %}" class="grey-text nav-link">
+                            <h5>{{ object.substitute.category }}</h5>
+                        </a>
+                    </div>
+                {% endif %}
+              {% endautoescape %}
+          {% endfor %}
+        </div>
+    </section>
+
+    <!--Pagination-->
+      {% if is_paginated %}
+      <nav class="d-flex justify-content-center wow fadeIn">
+        <ul class="pagination pg-blue">
+
+          {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active">
+                <a class="page-link" href="?page={{ num }}">{{ num }}
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+          {% endif %}
+
+
+        </ul>
+      </nav>
+    {% endif %}
+      <!--Pagination-->
+{% endblock content %}

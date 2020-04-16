@@ -11,8 +11,12 @@ class ProductView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Product'
-        context['categories'] = Category.objects.all()
         return context
+
+    def get_queryset(self):
+        search = self.request.GET['query']
+        product = Product.objects.filter(name__contains=search)
+        return product
 
 
 class ProductByCategoryView(ProductView):

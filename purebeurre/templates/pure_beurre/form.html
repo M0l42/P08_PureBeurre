@@ -1,0 +1,19 @@
+{% extends 'pure_beurre/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+    <header class="masthead">
+            <div class="container h-100">
+                <div class="card">
+                    <form class="card-body" method="post" enctype="multipart/form-data">{% csrf_token %}
+                        {{ form.as_p }}
+                    <input type="submit" value="Save">
+                    </form>
+                </div>
+            </div>
+    </header>
+
+
+{% endblock content %}
