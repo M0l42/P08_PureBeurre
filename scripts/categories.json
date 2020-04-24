@@ -1,0 +1,32 @@
+{
+  "tags": [
+    {
+      "id": "pates-a-tartiner-aux-noisettes-et-au-cacao",
+      "name": "Pâtes à tartiner aux noisettes et au cacao"
+    },
+    {
+      "id": "pizzas-royales",
+      "name": "Pizzas royales"
+    },
+    {
+      "id": "crepes-sucrees",
+      "name": "Crêpes sucrées"
+    },
+    {
+      "id": "mousses-au-chocolat",
+      "name": "Mousses au chocolat"
+    },
+    {
+      "id": "poulets-au-curry",
+      "name": "Poulets au curry"
+    },
+    {
+      "id": "hamburgers",
+      "name": "Hamburgers"
+    },
+    {
+      "id": "buches-glacees",
+      "name": "Bûches glacées"
+    }
+  ]
+}
