@@ -1,11 +1,23 @@
 from purebeurre.models import Product, Category, Favorite
+from django.views import View
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 
 
-class ProductView(ListView):
-    model = Product
+class ProductView(View):
     template_name = 'pure_beurre/product.html'
+
+    def get(self, request, *args, **kwargs):
+        context = dict()
+        context['title'] = 'Product'
+        context['product'] = Product.objects.get(pk=kwargs['product'])
+        return render(self.request, self.template_name, context=context)
+
+
+class ProductSearchView(ListView):
+    model = Product
+    template_name = 'pure_beurre/product_search.html'
     paginate_by = 20
 
     def get_context_data(self, **kwargs):
@@ -17,12 +29,6 @@ class ProductView(ListView):
         search = self.request.GET['query']
         product = Product.objects.filter(name__contains=search)
         return product
-
-
-class ProductByCategoryView(ProductView):
-    def get_queryset(self):
-        category = Category.objects.filter(tags=self.kwargs['category'])
-        return Product.objects.filter(category=category[0])
 
 
 class FindSubstituteView(ListView):
@@ -37,8 +43,9 @@ class FindSubstituteView(ListView):
         return context
 
     def get_queryset(self):
-        category = Category.objects.filter(tags=self.kwargs['category'])
-        substitute = Product.objects.filter(category=category[0]).order_by('nutrition_grade')
+        product = Product.objects.get(pk=self.kwargs['product'])
+        category = product.category
+        substitute = Product.objects.filter(category=category).order_by('nutrition_grade')
         return substitute
 
 
@@ -55,8 +62,8 @@ class SaveSubstituteView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        category = Category.objects.get(tags=self.kwargs['category'])
         product = Product.objects.get(pk=self.kwargs['product'])
+        category = product.category
         substitute = Product.objects.get(pk=self.kwargs['substitute'])
         Favorite.objects.create(user=user, category=category, product=product, substitute=substitute)
         return substitute
@@ -72,7 +79,6 @@ class FavoriteView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Favoris'
-        context['categories'] = Category.objects.all()
         return context
 
     def get_queryset(self):

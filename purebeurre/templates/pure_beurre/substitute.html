@@ -7,72 +7,35 @@
 {% block content %}
     <section class="text-center mb-4">
 
+        <header class="masthead">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-10 align-self-end">
+                        <h1 class="text-uppercase text-white font-weight-bold">{{ name }}</h1>
+                        <hr class="divider my-4" />
+                    </div>
+                </div>
+            </div>
+        </header>
+
         <!--Grid row-->
         <div class="row wow fadeIn">
 
           {% for object in object_list %}
               {% autoescape off %}
-                <div id="{{ object.id }}_{{ product.site }}" style="width: 500px; height: 300px; overflow: auto">
-                    <div style="float: left; width: 210px; height: 210px">
-                        <img class="image"
-                             src={{ object.img_url }}>
-                    </div>
-                    <h3><a class="nav-link" href="{% url 'save_favorite' category=object.category.tags product=product.pk substitute=object.pk %}">{{object.name}}</a></h3>
-                    <h4 class="font-weight-bold blue-text">
+                <div id="{{ object.id }}_{{ product.site }}" class="col-md-4 my-5">
+                    <img class="image"
+                         src={{ object.img_url }}>
+                    <p>{{object.name}}</p>
+                    <p class="font-weight-bold blue-text">
                         <strong>grade : {{ object.nutrition_grade }}</strong>
-                    </h4>
-                    <h4 class="font-weight-bold grey-text">
-                        <strong>code : {{ object.code }}</strong>
-                    </h4>
-                    <a href="{% url 'sort_product' object.category.tags %}" class="grey-text">
-                        <h5>{{ object.category }}</h5>
-                    </a>
+                    </p>
+                    <a class="nav-link" href="{% url 'save_favorite' product=product.pk substitute=object.pk %}"><p>Sauvegarder</p></a>
                 </div>
               {% endautoescape %}
           {% endfor %}
         </div>
     </section>
 
-    <!--Pagination-->
-      {% if is_paginated %}
-      <nav class="d-flex justify-content-center wow fadeIn">
-        <ul class="pagination pg-blue">
 
-          {% if page_obj.has_previous %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-          {% endif %}
-
-          {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-              <li class="page-item active">
-                <a class="page-link" href="?page={{ num }}">{{ num }}
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
-
-          {% if page_obj.has_next %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-          {% endif %}
-
-
-        </ul>
-      </nav>
-    {% endif %}
-      <!--Pagination-->
 {% endblock content %}

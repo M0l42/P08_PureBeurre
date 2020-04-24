@@ -4,28 +4,36 @@
 
 {% block content %}
 
-    <header class="masthead">
-        <div class="container h-100">
-            <div class="row h-100 align-items-center justify-content-center text-center">
-                <div class="col-lg-10 align-self-end">
-                    <h1 class="text-uppercase text-white font-weight-bold">{{ name }}</h1>
-                    <hr class="divider my-4" />
+    <header style="height: 50vh; background-image: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ product.img_url }}); background-repeat: no-repeat; background-position: center center;">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-10 align-self-end">
+                        <h1 class="text-uppercase text-white font-weight-bold">{{ product.name }}</h1>
+                        <hr class="divider my-4" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <div>
-        <div>
-            <p>Nutriscore</p>
+    <div class="row justify-content-center my-5">
+        <div class="col-md-6 text-center">
+            <p>Nutriscore : {{ product.nutrition_grade }}</p>
         </div>
-        <div>
-            <p>Repère nutritionnels pour 100g</p>
+        <div class="col-md-6 text-center">
+            <p>Repère nutritionnels pour 100g : </p>
+            <p>Gras : {{ product.saturated_fat_100 }}g</p>
+            <p>Gras saturé : {{ product.fat_100 }}g</p>
+            <p>Sucre : {{ product.sugar_100 }}g</p>
+            <p>Sel : {{ product.salt_100 }}g</p>
         </div>
     </div>
 
-    <div>
-        <p>Voir la fiche d'Openfoodfacts</p>
+    <div class="text-center my-5">
+        <button type="button" class="btn btn-outline-dark">
+            <a href="{{ product.url }}">Voir la fiche d'Openfoodfacts</a>
+        </button>
     </div>
 
 {% endblock content %}

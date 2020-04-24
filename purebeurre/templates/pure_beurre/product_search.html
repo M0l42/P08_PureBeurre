@@ -28,16 +28,17 @@
 
           {% for object in object_list %}
               {% autoescape off %}
-                {% if object.product %}
-                    <div id="{{ object.id }}_{{ object.substitute.id }}" class="col-md-4 my-5">
+                <div id="{{ object.id }}_{{ product.site }}" class="col-md-4 my-5">
+                    <a href="{% url 'product' product=object.pk %}">
                         <img class="image"
-                             src={{ object.substitute.img_url }}>
-                        <a target="_blank" href="{% url 'product' product=object.substitute.pk %}"></br>{{object.substitute.name}}</a>
+                             src={{ object.img_url }}>
+                        <h3>{{object.name}}</h3>
                         <h4 class="font-weight-bold blue-text">
-                            <strong>grade : {{ object.substitute.nutrition_grade }}</strong>
+                            <strong>grade : {{ object.nutrition_grade }}</strong>
                         </h4>
-                    </div>
-                {% endif %}
+                        <a class="nav-link" href="{% url 'find_substitute' product=object.pk %}"><p>Substituer</p></a>
+                    </a>
+                </div>
               {% endautoescape %}
           {% endfor %}
         </div>
