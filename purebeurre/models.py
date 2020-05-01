@@ -32,7 +32,7 @@ class Product(models.Model):
         default='',
         null=True
     )
-    code = models.IntegerField(verbose_name="code", default=0)
+    code = models.CharField(verbose_name="code", max_length=20, blank=True, null=True)
     url = models.TextField(verbose_name="url", blank=True, null=True)
     img_url = models.TextField(verbose_name="image_url", blank=True, null=True)
     fat_100 = models.FloatField(verbose_name="fat_100g", blank=True, default=0, null=True)
