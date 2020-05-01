@@ -35,7 +35,6 @@
                     <ul class="navbar-nav ml-auto my-2 my-lg-0">
                         <li class="nav-item">
                             <form action="{% url 'product_search' %}" method="get">
-                                {% csrf_token %}
                                 <input name="query" class="form-control form-control-sm" id="navbar-input" type="text" placeholder="Rechercher">
                             </form>
                         </li>
@@ -116,7 +115,12 @@
 
         <!-- Footer-->
         <footer class="bg-light py-5">
-            <div class="container"><div class="small text-center text-muted">Copyright © 2020 - Start Bootstrap</div></div>
+            <div class="container">
+                <div class="small text-center">
+                    <a class="mx-5">Mention legal</a>
+                    <a class="mx-5">Contact</a>
+                </div>
+            </div>
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

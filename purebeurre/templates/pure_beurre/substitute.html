@@ -7,12 +7,14 @@
 {% block content %}
     <section class="text-center mb-4">
 
-        <header class="masthead">
+        <header style="height: 50vh; background-image: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ product.img_url }}); background-repeat: no-repeat; background-position: center center;">
             <div class="container h-100">
                 <div class="row h-100 align-items-center justify-content-center text-center">
                     <div class="col-lg-10 align-self-end">
-                        <h1 class="text-uppercase text-white font-weight-bold">{{ name }}</h1>
+                        <h1 class="text-uppercase text-white font-weight-bold">{{ product.name }}</h1>
                         <hr class="divider my-4" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
                     </div>
                 </div>
             </div>
@@ -23,14 +25,14 @@
 
           {% for object in object_list %}
               {% autoescape off %}
-                <div id="{{ object.id }}_{{ product.site }}" class="col-md-4 my-5">
+                <div id="{{ object.id }}_{{ product.site }}" class="col-md-4 my-5 p-5">
+                    {% if object.nutrition_grade %}
+                            <span class="nutriscore">{{ object.nutrition_grade }}</span>
+                    {% endif %}
                     <img class="image"
                          src={{ object.img_url }}>
-                    <p>{{object.name}}</p>
-                    <p class="font-weight-bold blue-text">
-                        <strong>grade : {{ object.nutrition_grade }}</strong>
-                    </p>
-                    <a class="nav-link" href="{% url 'save_favorite' product=product.pk substitute=object.pk %}"><p>Sauvegarder</p></a>
+                    <a target="_blank" href="{% url 'product' product=object.pk %}"></br>{{object.name}}</a>
+                    <a class="nav-link" href="{% url 'save_favorite' product=product.pk substitute=object.pk %}"><span class="fas fa-save"></span> Sauvegarder</a>
                 </div>
               {% endautoescape %}
           {% endfor %}

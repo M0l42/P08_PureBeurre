@@ -19,7 +19,11 @@
 
     <div class="row justify-content-center my-5">
         <div class="col-md-6 text-center">
-            <p>Nutriscore : {{ product.nutrition_grade }}</p>
+            <p>Nutriscore</p>
+            {% if product.nutrition_grade != 'None' %}
+                <img class="image"
+                     src={% static 'assets/img/nutriscore/'|add:product.nutrition_grade|add:'.png'  %}/>
+            {% endif %}
         </div>
         <div class="col-md-6 text-center">
             <p>Repère nutritionnels pour 100g : </p>

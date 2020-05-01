@@ -11,15 +11,21 @@
       crossorigin="anonymous"></script>
 
     <header class="masthead">
-        <div class="container h-100">
-            <div class="row h-100 align-items-center justify-content-center text-center">
-                <div class="col-lg-10 align-self-end">
-                    <h1 class="text-uppercase text-white font-weight-bold">{{ name }}</h1>
-                    <hr class="divider my-4" />
+            <div class="container h-100">
+                <div class="row h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-10 align-self-end">
+                        <h1 class="text-uppercase text-white font-weight-bold">{{ request.GET.query }}</h1>
+                        <hr class="divider my-4" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                        <p class="text-white-75 font-weight-light mb-5">Trouvez un produit de substitution pour ce que vous consommez tous les jours.</p>
+                        <form action="{% url 'product_search' %}" method="get">
+                            <input name="query" class="form-control form-control-sm" id="navbar-input" type="text" placeholder="Rechercher">
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
     <section class="text-center mb-4">
 
@@ -28,16 +34,17 @@
 
           {% for object in object_list %}
               {% autoescape off %}
-                <div id="{{ object.id }}_{{ product.site }}" class="col-md-4 my-5">
-                    <a href="{% url 'product' product=object.pk %}">
+                <div id="{{ object.id }}_{{ product.site }}" class="col-md-4 my-5 px-5" >
+                    <div>
+                        {% if object.nutrition_grade %}
+                            <span class="nutriscore">{{ object.nutrition_grade }}</span>
+                        {% endif %}
                         <img class="image"
                              src={{ object.img_url }}>
-                        <h3>{{object.name}}</h3>
-                        <h4 class="font-weight-bold blue-text">
-                            <strong>grade : {{ object.nutrition_grade }}</strong>
-                        </h4>
+                        <a href="{% url 'product' product=object.pk %}">
+                            <h3>{{object.name}}</h3></a>
                         <a class="nav-link" href="{% url 'find_substitute' product=object.pk %}"><p>Substituer</p></a>
-                    </a>
+                    </div>
                 </div>
               {% endautoescape %}
           {% endfor %}
