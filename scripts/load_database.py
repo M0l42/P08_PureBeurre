@@ -23,13 +23,13 @@ def check_error(check_data, first_arg, second_arg):
 
 def run():
     headers = {"user-agent": "python-app/0.0.1"}
-    
+
     current_path = os.path.dirname(os.path.abspath(__file__))
     json_path = os.path.join(current_path, "categories.json")
 
     with open(json_path, 'r') as file:
         data = json.load(file)
-    
+
     categories_url = "https://fr.openfoodfacts.org/categorie/"
     print("Creating Category")
     for category in data['tags']:
@@ -37,7 +37,7 @@ def run():
         new_category = Category()
         new_category.name = category['name']
         new_category.tags = category['id']
-        new_category.url = categories_url + new_category.url.tags + ".json"
+        new_category.url = categories_url + new_category.tags + ".json"
         # Get the number of product available in this category ( can change )
         r = requests.get(new_category.url, headers=headers)
         new_category.products = r.json()["count"]
@@ -49,7 +49,7 @@ def run():
     print('Creating Product')
 
     search_url = "https://fr.openfoodfacts.org/cgi/search.pl?"
-    
+
     for category in categories:
         print("Start loading product from category %s" % category.name)
 
