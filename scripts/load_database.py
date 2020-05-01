@@ -37,7 +37,7 @@ def run():
         new_category = Category()
         new_category.name = category['name']
         new_category.tags = category['id']
-        new_category.url = categories_url + new_category.url.tags + ".json"
+        new_category.url = categories_url + new_category.tags + ".json"
         # Get the number of product available in this category ( can change )
         r = requests.get(new_category.url, headers=headers)
         new_category.products = r.json()["count"]
