@@ -15,10 +15,12 @@ class ProductView(View):
 
     def get(self, request, *args, **kwargs):
         context = dict()
-        context['title'] = 'Product'
+
 
         try:
-            context['product'] = Product.objects.get(pk=kwargs['product'])
+            product = Product.objects.get(pk=kwargs['product'])
+            context['product'] = product
+            context['title'] = product.name
         except ObjectDoesNotExist:
             return HttpResponseNotFound('<h1>Page not found</h1>')
 
@@ -32,7 +34,7 @@ class ProductSearchView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Product'
+        context['title'] = 'Product searched'
         return context
 
     def get_queryset(self):

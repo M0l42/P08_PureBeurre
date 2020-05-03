@@ -7,11 +7,11 @@ class HomeView(View):
     template_name = 'pure_beurre/home.html'
 
     def get(self, request, *args, **kwargs):
-        return render(self.request, self.template_name)
+        return render(self.request, self.template_name, context={'title': 'Home'})
 
 
 def legal_mentions(requests):
-    return render(requests, 'pure_beurre/mention-legal.html')
+    return render(requests, 'pure_beurre/mention-legal.html', context={'title': 'Mentions légale'})
 
 
 class AccountView(LoginRequiredMixin, View):
