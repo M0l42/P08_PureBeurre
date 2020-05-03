@@ -27,10 +27,12 @@
         </div>
         <div class="col-md-6 text-center">
             <p>Repère nutritionnels pour 100g : </p>
-            <p>Gras : {{ product.saturated_fat_100 }}g</p>
-            <p>Gras saturé : {{ product.fat_100 }}g</p>
-            <p>Sucre : {{ product.sugar_100 }}g</p>
-            <p>Sel : {{ product.salt_100 }}g</p>
+            <ul class="nutrient-levels">
+            <li class="{{ product.fat_lvl }}">Gras : {{ product.saturated_fat_100 }}g</li>
+            <li class="{{ product.saturated_fat_lvl }}">Gras saturé : {{ product.fat_100 }}g</li>
+            <li class="{{ product.sugar_lvl }}">Sucre : {{ product.sugar_100 }}g</li>
+            <li class="{{ product.salt_lvl }}">Sel : {{ product.salt_100 }}g</li>
+            </ul>
         </div>
     </div>
 

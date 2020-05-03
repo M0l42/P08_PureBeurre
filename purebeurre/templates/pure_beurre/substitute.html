@@ -32,7 +32,12 @@
                     <img class="image"
                          src={{ object.img_url }}>
                     <a target="_blank" href="{% url 'product' product=object.pk %}"></br>{{object.name}}</a>
-                    <a class="nav-link" href="{% url 'save_favorite' product=product.pk substitute=object.pk %}"><span class="fas fa-save"></span> Sauvegarder</a>
+{#                    <a class="nav-link" href="{% url 'save_favorite' product=product.pk substitute=object.pk %}"><span class="fas fa-save"></span> Sauvegarder</a>#}
+                    <form method="post">{% csrf_token %}
+                        <input type="hidden" name="substitute" value="{{ object.pk }}">
+                        <span class="fas fa-save"></span> Sauvegarder
+                        <input type="submit" value="Save">
+                    </form>
                 </div>
               {% endautoescape %}
           {% endfor %}

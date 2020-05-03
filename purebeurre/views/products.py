@@ -2,7 +2,12 @@ from purebeurre.models import Product, Category, Favorite
 from django.views import View
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseNotFound
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ProductView(View):
@@ -11,7 +16,12 @@ class ProductView(View):
     def get(self, request, *args, **kwargs):
         context = dict()
         context['title'] = 'Product'
-        context['product'] = Product.objects.get(pk=kwargs['product'])
+
+        try:
+            context['product'] = Product.objects.get(pk=kwargs['product'])
+        except ObjectDoesNotExist:
+            return HttpResponseNotFound('<h1>Page not found</h1>')
+
         return render(self.request, self.template_name, context=context)
 
 
@@ -47,6 +57,17 @@ class FindSubstituteView(ListView):
         category = product.category
         substitute = Product.objects.filter(category=category).exclude(nutrition_grade__isnull=True).order_by('nutrition_grade')
         return substitute
+
+    def post(self, *args, **kwargs):
+        if self.request.method == "POST":
+            sub = self.request.POST['substitute']
+            product = Product.objects.get(pk=kwargs['product'])
+            substitute = Product.objects.get(pk=sub)
+            user = self.request.user
+            Favorite.objects.create(user=user, substitute=substitute, category=substitute.category, product=product)
+
+            return redirect('/')
+
 
 
 class SaveSubstituteView(LoginRequiredMixin, ListView):
