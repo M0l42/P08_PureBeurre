@@ -14,7 +14,7 @@
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-center text-center">
                 <div class="col-lg-10 align-self-end">
-                    <h1 class="text-uppercase text-white font-weight-bold">{{ name }}</h1>
+                    <h1 class="text-uppercase text-white font-weight-bold">Favoris</h1>
                     <hr class="divider my-4" />
                 </div>
             </div>
@@ -28,14 +28,14 @@
 
           {% for object in object_list %}
               {% autoescape off %}
-                {% if object.product %}
+                {% if object.substitute %}
                     <div id="{{ object.id }}_{{ object.substitute.id }}" class="col-md-4 my-5">
+                        {% if object.substitute.nutrition_grade %}
+                            <span class="nutriscore">{{ object.substitute.nutrition_grade }}</span>
+                        {% endif %}
                         <img class="image"
                              src={{ object.substitute.img_url }}>
                         <a target="_blank" href="{% url 'product' product=object.substitute.pk %}"></br>{{object.substitute.name}}</a>
-                        <h4 class="font-weight-bold blue-text">
-                            <strong>grade : {{ object.substitute.nutrition_grade }}</strong>
-                        </h4>
                     </div>
                 {% endif %}
               {% endautoescape %}

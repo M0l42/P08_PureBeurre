@@ -50,9 +50,7 @@ class Product(models.Model):
 
 class Favorite(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
-    product = models.ForeignKey('Product', related_name='product', on_delete=models.CASCADE)
     substitute = models.ForeignKey('Product', related_name='substitute', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='favorite_category', null=True)
 
     def __str__(self):
-        return self.product.name
+        return self.substitute.name

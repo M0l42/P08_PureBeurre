@@ -17,6 +17,6 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product')
-    search_fields = ('user', 'product', )
-    list_filter = ['user', 'product']
+    list_display = ('user', 'substitute')
+    search_fields = ('user', 'substitute', )
+    list_filter = ['user', 'substitute']

@@ -66,30 +66,9 @@ class FindSubstituteView(ListView):
             product = Product.objects.get(pk=kwargs['product'])
             substitute = Product.objects.get(pk=sub)
             user = self.request.user
-            Favorite.objects.create(user=user, substitute=substitute, category=substitute.category, product=product)
+            Favorite.objects.create(user=user, substitute=substitute)
 
             return redirect('/')
-
-
-
-class SaveSubstituteView(LoginRequiredMixin, ListView):
-    login_url = '/login/'
-    redirect_field_name = 'redirect_to'
-    model = Favorite
-    template_name = 'pure_beurre/save_favorite.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Save Favorite'
-        return context
-
-    def get_queryset(self):
-        user = self.request.user
-        product = Product.objects.get(pk=self.kwargs['product'])
-        category = product.category
-        substitute = Product.objects.get(pk=self.kwargs['substitute'])
-        Favorite.objects.create(user=user, category=category, product=product, substitute=substitute)
-        return substitute
 
 
 class FavoriteView(LoginRequiredMixin, ListView):

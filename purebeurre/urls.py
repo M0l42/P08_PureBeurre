@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import HomeView, AccountView, legal_mentions
-from .views.products import ProductView, ProductSearchView, SaveSubstituteView, FindSubstituteView, FavoriteView
+from .views.products import ProductView, ProductSearchView, FindSubstituteView, FavoriteView
 from .views.login import LogInFormView, SignUpFormView, LogOutView
 
 urlpatterns = [
@@ -11,7 +11,6 @@ urlpatterns = [
     path('product/', ProductSearchView.as_view(), name='product_search'),
     path('product/<int:product>/', ProductView.as_view(), name='product'),
     path('substitute/<int:product>/', FindSubstituteView.as_view(), name='find_substitute'),
-    path('substitute/<int:product>/<int:substitute>', SaveSubstituteView.as_view(), name='save_favorite'),
 
     path('favorite/', FavoriteView.as_view(), name='favorite'),
 
