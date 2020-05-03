@@ -22,6 +22,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/main.css' %}" rel="stylesheet" />
     </head>
 {% endblock bootstrap4_extra_head %}
 
@@ -117,8 +118,8 @@
         <footer class="bg-light py-5">
             <div class="container">
                 <div class="small text-center">
-                    <a class="mx-5" href="{% url 'legal_mentions' %}">Mention legal</a>
-                    <a class="mx-5">Contact</a>
+                    <a class="mx-5 footer-link" href="{% url 'legal_mentions' %}">Mention legal</a>
+                    <a class="mx-5 footer-link" href="{% url 'home' %}#contact">Contact</a>
                 </div>
             </div>
         </footer>
