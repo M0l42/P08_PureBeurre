@@ -10145,3 +10145,19 @@ header.masthead h1 {
   box-shadow: 1px 1px 5px #345a61;
   color: #ffffff;
 }
+
+ul.nutrient-levels{
+    padding-left: 0;
+}
+ul.nutrient-levels li{
+    padding: 10px 0 10px 50px;
+	list-style: none;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: 30px;
+}
+li.moderate {
+  background-image: url('../assets/img/score_value/moderate.svg');
+}
+li.high {background-image: url('../assets/img/score_value/high.svg');}
+li.low {background-image: url('../assets/img/score_value/low.svg');}

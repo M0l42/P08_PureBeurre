@@ -7,9 +7,11 @@ class HomeView(View):
     template_name = 'pure_beurre/home.html'
 
     def get(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            return render(requests, 'pure_beurre/product.html')
         return render(self.request, self.template_name)
+
+
+def legal_mentions(requests):
+    return render(requests, 'pure_beurre/mention-legal.html')
 
 
 class AccountView(LoginRequiredMixin, View):
@@ -23,6 +25,4 @@ class AccountView(LoginRequiredMixin, View):
         return context
 
     def get(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            return render(requests, 'pure_beurre/product.html')
         return render(request, self.template_name)

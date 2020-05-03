@@ -23,13 +23,13 @@ def check_error(check_data, first_arg, second_arg):
 
 def run():
     headers = {"user-agent": "python-app/0.0.1"}
-    
+
     current_path = os.path.dirname(os.path.abspath(__file__))
     json_path = os.path.join(current_path, "categories.json")
 
     with open(json_path, 'r') as file:
         data = json.load(file)
-    
+
     categories_url = "https://fr.openfoodfacts.org/categorie/"
     print("Creating Category")
     for category in data['tags']:
@@ -49,7 +49,7 @@ def run():
     print('Creating Product')
 
     search_url = "https://fr.openfoodfacts.org/cgi/search.pl?"
-    
+
     for category in categories:
         print("Start loading product from category %s" % category.name)
 
