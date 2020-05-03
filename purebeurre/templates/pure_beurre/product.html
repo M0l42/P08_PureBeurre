@@ -22,7 +22,7 @@
             <p>Nutriscore</p>
             {% if product.nutrition_grade != 'None' %}
                 <img class="image"
-                     src={% static 'assets/img/nutriscore/'|add:product.nutrition_grade|add:'.png'  %}/>
+                     src='{% get_static_prefix %}assets/img/nutriscore/{{ product.nutrition_grade }}.png'/>
             {% endif %}
         </div>
         <div class="col-md-6 text-center">
