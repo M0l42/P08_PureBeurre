@@ -39,6 +39,10 @@
                     </div>
                 {% endif %}
               {% endautoescape %}
+          {% empty %}
+              <div class="col align-self-center m-5">
+                <p>Désolé, Vous n'avez pour l'instant aucun produit sauvegarder</p>
+              </div>
           {% endfor %}
         </div>
     </section>
