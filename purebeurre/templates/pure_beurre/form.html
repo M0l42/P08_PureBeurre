@@ -11,6 +11,11 @@
                 <div class="card my-5">
                     <h1 class="card-header text-center">{{ title }}</h1>
                     <div class="card-body" >
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                              {{ error }}
+                            </div>
+                        {% endif %}
                         <form method="post" enctype="multipart/form-data">{% csrf_token %}
                             {{ form.as_p }}
                         <input type="submit" value={{ title }}>

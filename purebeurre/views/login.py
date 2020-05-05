@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import redirect, render
 from django.views.generic.base import RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from purebeurre.forms.login import SignUpForm, LogInForm
@@ -74,11 +75,19 @@ class SignUpFormView(FormView):
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
         confirm_password = form.cleaned_data['confirm_password']
+        context = self.get_context_data()
+        context['error'] = ''
 
-        if password == confirm_password:
-            User.objects.create_user(username=user_name, email=email, password=password)
-        else:
-            return redirect(reverse('sign_up'))
+        try:
+            User.objects.get(username=user_name)
+            context['error'] = "Le nom d'utilisateur est déjà pris"
+            return render(self.request, self.template_name, context=context)
+        except ObjectDoesNotExist:
+            if password == confirm_password:
+                User.objects.create_user(username=user_name, email=email, password=password)
+            else:
+                context['error'] = 'Les deux mots de passe ne sont pas les mêmes'
+                return render(self.request, self.template_name, context=context)
 
         return super().form_valid(form)
 
@@ -147,12 +156,14 @@ class LogInFormView(FormView):
         """
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
+        context = self.get_context_data()
 
         user = authenticate(self.request, username=username, password=password)
         if user is not None:
             login(self.request, user)
         else:
-            return redirect('/login/')
+            context['error'] = "Votre nom d'utilisteur ou votre Mot de passe est incorrect"
+            return render(self.request, self.template_name, context=context)
 
         return super().form_valid(form)
 
