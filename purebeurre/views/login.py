@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
 from django.shortcuts import redirect
 from django.views.generic.base import RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -74,13 +75,10 @@ class SignUpFormView(FormView):
         password = form.cleaned_data['password']
         confirm_password = form.cleaned_data['confirm_password']
 
-        context = self.get_context_data()
-
         if password == confirm_password:
             User.objects.create_user(username=user_name, email=email, password=password)
         else:
-            context['error'] = 'The two password are not identical'
-            return redirect('/sign_up/')
+            return redirect(reverse('sign_up'))
 
         return super().form_valid(form)
 
