@@ -50,7 +50,6 @@ class ProductPageTestCase(TestCase):
 
     def test_product_page_return_404(self):
         product_id = self.product.id + 1
-        # response = self.client.get()
         response = self.client.get(reverse('product', args=(product_id,)))
         self.assertEqual(response.status_code, 404)
 
@@ -93,8 +92,7 @@ class SubstitutePageTestCase(TestCase):
         old_favorite = Favorite.objects.count()
         product_id = self.product.id
         self.client.login(username='testuser', password='12345')
-        response = self.client.post(reverse('find_substitute', args=(product_id,)),
-                                    {'substitute': self.substitute.id})
+        self.client.post(reverse('find_substitute', args=(product_id,)), {'substitute': self.substitute.id})
         new_favorite = Favorite.objects.count()
         self.assertEqual(new_favorite, old_favorite + 1)
 
@@ -129,14 +127,14 @@ class SignUpTestCase(TestCase):
     def test_sign_up_valid(self):
         old_accounts = User.objects.count()
         self.form["confirm_password"] = "123456"
-        response = self.client.post(reverse('sign_up'), self.form)
+        self.client.post(reverse('sign_up'), self.form)
         new_accounts = User.objects.count()
         self.assertEqual(new_accounts, old_accounts + 1)
 
     def test_sign_up_non_valid(self):
         old_accounts = User.objects.count()
         self.form["confirm_password"] = "abcde"
-        response = self.client.post(reverse('sign_up'), self.form)
+        self.client.post(reverse('sign_up'), self.form)
         new_accounts = User.objects.count()
         self.assertEqual(new_accounts, old_accounts)
 
@@ -146,12 +144,12 @@ class LogInTestCase(TestCase):
         create_testing_user()
 
     def test_log_in_success(self):
-        response = self.client.post(reverse('login'), {"username": "testuser", "password": "12345"})
+        self.client.post(reverse('login'), {"username": "testuser", "password": "12345"})
         user = auth.get_user(self.client)
         assert user.is_authenticated
 
     def test_log_in_failure(self):
-        response = self.client.post(reverse('login'), {"username": "testuser", "password": "123456"})
+        self.client.post(reverse('login'), {"username": "testuser", "password": "123456"})
         user = auth.get_user(self.client)
         assert not user.is_authenticated
 
@@ -162,6 +160,6 @@ class LogOffTestCase(TestCase):
 
     def test_log_off(self):
         self.client.login(username='testuser', password='12345')
-        response = self.client.get(reverse('logout'))
+        self.client.get(reverse('logout'))
         user = auth.get_user(self.client)
         assert not user.is_authenticated
