@@ -104,9 +104,8 @@ class FavoritePageTestCase(TestCase):
         user = create_testing_user()
         create_testing_user(username='testuser no favorite', password='12345')
         category = Category.objects.create(name="test category")
-        product = Product.objects.create(name="test", category=category, nutrition_grade=None)
         substitute = Product.objects.create(name="test sub", category=category, nutrition_grade="a")
-        self.favorite = Favorite.objects.create(user=user, product=product, substitute=substitute, category=category)
+        self.favorite = Favorite.objects.create(user=user, substitute=substitute)
 
     def test_search_substitute_page_no_object(self):
         self.client.login(username='testuser no favorite', password='12345')
@@ -116,7 +115,7 @@ class FavoritePageTestCase(TestCase):
     def test_search_substitute_page_with_object(self):
         self.client.login(username='testuser', password='12345')
         response = self.client.get(reverse('favorite'))
-        self.assertQuerysetEqual(response.context['object_list'], ['<Favorite: test>'])
+        self.assertQuerysetEqual(response.context['object_list'], ['<Favorite: test sub>'])
 
 
 class SignUpTestCase(TestCase):
