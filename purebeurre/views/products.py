@@ -207,7 +207,10 @@ class FindSubstituteView(ListView):
                 sub = self.request.POST['substitute']
                 substitute = Product.objects.get(pk=sub)
                 user = self.request.user
-                Favorite.objects.create(user=user, substitute=substitute)
+                try:
+                    Favorite.objects.get(user=user, substitute=substitute)
+                except ObjectDoesNotExist:
+                    Favorite.objects.create(user=user, substitute=substitute)
 
                 return redirect('/')
             else:
