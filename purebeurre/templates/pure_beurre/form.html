@@ -10,10 +10,12 @@
             <div class="container h-100">
                 <div class="card my-5">
                     <h1 class="card-header text-center">{{ title }}</h1>
-                    <form class="card-body" method="post" enctype="multipart/form-data">{% csrf_token %}
-                        {{ form.as_p }}
-                    <input type="submit" value="Save">
-                    </form>
+                    <div class="card-body" >
+                        <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                            {{ form.as_p }}
+                        <input type="submit" value={{ title }}>
+                        </form>
+                    </div>
                 </div>
             </div>
     </header>
