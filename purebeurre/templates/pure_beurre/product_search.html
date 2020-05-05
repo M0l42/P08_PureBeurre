@@ -47,6 +47,10 @@
                     </div>
                 </div>
               {% endautoescape %}
+          {% empty %}
+              <div class="col align-self-center m-5">
+                <p>Désolé, nous avons trouver aucun produit correspondant</p>
+              </div>
           {% endfor %}
         </div>
     </section>
