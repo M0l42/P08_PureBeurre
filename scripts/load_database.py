@@ -22,6 +22,12 @@ def check_error(check_data, first_arg, second_arg):
 
 
 def run():
+    """
+    Script to Load data from https://fr.openfoodfacts.org/
+    Get the categories from a json files, and make a request to get the number of product of that category
+    Get all the product from all the loaded category
+    Put all of this in the database
+    """
     headers = {"user-agent": "python-app/0.0.1"}
 
     current_path = os.path.dirname(os.path.abspath(__file__))
