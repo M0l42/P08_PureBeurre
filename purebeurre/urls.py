@@ -1,12 +1,12 @@
 from django.urls import path
-from .views import HomeView, AccountView, legal_mentions
+from .views import home_view, account_view, legal_mentions
 from .views.products import ProductView, ProductSearchView, FindSubstituteView, FavoriteView
 from .views.login import LogInFormView, SignUpFormView, LogOutView
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
+    path('', home_view, name='home'),
     path('mentions-legals', legal_mentions, name="legal_mentions"),
-    path('account/', AccountView.as_view(), name='account'),
+    path('account/', account_view, name='account'),
 
     path('product/', ProductSearchView.as_view(), name='product_search'),
     path('product/<int:product>/', ProductView.as_view(), name='product'),
