@@ -27,9 +27,9 @@
                      src='{% get_static_prefix %}assets/img/nutriscore/{{ product.nutrition_grade }}.png'/>
             {% endif %}
         </div>
-        <div class="col-md-6 text-center">
+        <div class="col-md-6 text-center px-5">
             <p>Repère nutritionnels pour 100g : </p>
-            <ul class="nutrient-levels">
+            <ul class="nutrient-levels px-5">
             <li class="{{ product.fat_lvl }}">Gras : {{ product.saturated_fat_100 }}g</li>
             <li class="{{ product.saturated_fat_lvl }}">Gras saturé : {{ product.fat_100 }}g</li>
             <li class="{{ product.sugar_lvl }}">Sucre : {{ product.sugar_100 }}g</li>
