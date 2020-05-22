@@ -68,3 +68,15 @@ class Favorite(models.Model):
 
     def __str__(self):
         return self.substitute.name
+
+
+class UserInfos(models.Model):
+    """
+        A model connected to the User Model to add more infos like an image ( a description in the future )
+    """
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    image = models.ImageField(upload_to='static/img')
