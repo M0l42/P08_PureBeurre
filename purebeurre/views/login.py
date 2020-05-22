@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 from django.views.generic.base import RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from purebeurre.forms.login import SignUpForm, LogInForm
+from django.views import View
 from django.views.generic.edit import FormView
 
 
@@ -208,3 +209,15 @@ class LogOutView(LoginRequiredMixin, RedirectView):
         """
         logout(self.request)
         return super().get_redirect_url(*args, **kwargs)
+
+
+class AccountView(LoginRequiredMixin, View):
+
+    template_name = 'pure_beurre/account.html'
+
+    def get(self, *args, **kwargs):
+        context = dict()
+        context['title'] = 'Account'
+        context['user'] = self.request.user
+
+        return render(self.request, self.template_name, context=context)
