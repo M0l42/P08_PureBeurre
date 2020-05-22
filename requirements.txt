@@ -9,6 +9,7 @@ django-extensions==2.2.9
 gunicorn==20.0.4
 idna==2.9
 Pillow==7.1.2
+psycopg2==2.8.5
 pytz==2019.3
 requests==2.23.0
 six==1.14.0
