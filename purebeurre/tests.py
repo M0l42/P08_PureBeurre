@@ -1,12 +1,15 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib import auth
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
-from .models import Product, Category, Favorite
+from .models import Product, Category, Favorite, UserInfos
+
+import os
 
 
 def create_testing_user(username='testuser', password='12345'):
-    user = User.objects.create(username=username)
+    user = User.objects.create(username=username, email="test@test.com")
     user.set_password(password)
     user.save()
     return user
@@ -26,7 +29,7 @@ class LegalMentionsPageTestCase(TestCase):
 
 class AccountPageTestCase(TestCase):
     def setUp(self):
-        create_testing_user()
+        UserInfos.objects.create(user=create_testing_user())
 
     def test_index_page_returns_302(self):
         response = self.client.get(reverse('account'))
@@ -36,6 +39,25 @@ class AccountPageTestCase(TestCase):
         self.client.login(username='testuser', password='12345')
         response = self.client.get(reverse('account'))
         self.assertEqual(response.status_code, 200)
+
+
+class EditAccountPageTestCase(TestCase):
+    def setUp(self):
+        UserInfos.objects.create(user=create_testing_user())
+        path = os.path.join(os.getcwd(), "purebeurre/image_test.jpg")
+        self.image = SimpleUploadedFile(name='image_test.jpg', content=open(path, 'rb').read(), content_type='image/jpeg')
+
+    def test_index_page_returns_302(self):
+        response = self.client.get(reverse('edit-account'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_index_page_returns_200(self):
+        self.client.login(username='testuser', password='12345', email="test@test.com")
+        self.client.post(reverse('edit-account'), {"email": "email@email.com", "image": self.image})
+        user = auth.get_user(self.client)
+        user_info = UserInfos.objects.get(user=user)
+        self.assertEqual(user.email, "email@email.com")
+        assert user_info.image
 
 
 class ProductPageTestCase(TestCase):
