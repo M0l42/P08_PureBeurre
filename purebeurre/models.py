@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+import os
 
 NUTRITION_GRADES = [
     ('', 'N/A'),
@@ -70,6 +71,12 @@ class Favorite(models.Model):
         return self.substitute.name
 
 
+def photo_path(instance, filename):
+    basefilename, file_extension = os.path.splitext(filename)
+    return 'purebeurre/static/assets/img/users/{userid}.jpg'.format(
+        userid=instance.user.id, basename=basefilename)
+
+
 class UserInfos(models.Model):
     """
         A model connected to the User Model to add more infos like an image ( a description in the future )
@@ -79,4 +86,4 @@ class UserInfos(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    image = models.ImageField(upload_to='static/img')
+    image = models.ImageField(upload_to=photo_path)
