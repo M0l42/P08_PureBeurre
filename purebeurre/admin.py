@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Favorite
+from .models import Category, Product, Favorite, UserInfos
 
 
 @admin.register(Category)
@@ -20,3 +20,9 @@ class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('user', 'substitute')
     search_fields = ('user', 'substitute', )
     list_filter = ['user', 'substitute']
+
+
+@admin.register(UserInfos)
+class UserInfosAdmin(admin.ModelAdmin):
+    list_display = ('user', )
+    search_fields = ('user', )

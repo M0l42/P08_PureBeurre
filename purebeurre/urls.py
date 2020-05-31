@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import home_view, legal_mentions
 from .views.products import ProductView, ProductSearchView, FindSubstituteView, FavoriteView
-from .views.login import LogInFormView, SignUpFormView, LogOutView, AccountView
+from .views.login import LogInFormView, SignUpFormView, LogOutView, AccountView, EditAccountFormView
 
 urlpatterns = [
     path('', home_view, name='home'),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('login/', LogInFormView.as_view(), name='login'),
     path('logout/', LogOutView.as_view(), name='logout'),
     path('account/', AccountView.as_view(), name='account'),
+    path('edit-account/', EditAccountFormView.as_view(), name='edit-account'),
 ]
