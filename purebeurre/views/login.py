@@ -1,13 +1,16 @@
 from django.contrib.auth.models import User
+from purebeurre.models import UserInfos
 from django.contrib.auth import authenticate, login, logout
-from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.views.generic.base import RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from purebeurre.forms.login import SignUpForm, LogInForm
+from purebeurre.forms.edit import EditAccountForm
 from django.views import View
 from django.views.generic.edit import FormView
+
+import os
 
 
 class SignUpFormView(FormView):
@@ -85,7 +88,8 @@ class SignUpFormView(FormView):
             return render(self.request, self.template_name, context=context)
         except ObjectDoesNotExist:
             if password == confirm_password:
-                User.objects.create_user(username=user_name, email=email, password=password)
+                user = User.objects.create_user(username=user_name, email=email, password=password)
+                UserInfos.objects.create(user=user)
             else:
                 context['error'] = 'Les deux mots de passe ne sont pas les mêmes'
                 return render(self.request, self.template_name, context=context)
@@ -213,11 +217,42 @@ class LogOutView(LoginRequiredMixin, RedirectView):
 
 class AccountView(LoginRequiredMixin, View):
 
+    login_url = '/login/'
     template_name = 'pure_beurre/account.html'
 
     def get(self, *args, **kwargs):
         context = dict()
         context['title'] = 'Account'
         context['user'] = self.request.user
+        context['user_info'] = UserInfos.objects.get(user=self.request.user)
 
         return render(self.request, self.template_name, context=context)
+
+
+class EditAccountFormView(LoginRequiredMixin, FormView):
+    login_url = '/login/'
+    form_class = EditAccountForm
+    template_name = 'pure_beurre/form.html'
+    success_url = '/account/'
+
+    def get_context_data(self, **kwargs):
+        context = super(EditAccountFormView, self).get_context_data(**kwargs)
+        context['title'] = 'Edit Account'
+        return context
+
+    def form_valid(self, form):
+        image = form.cleaned_data['image']
+        email = form.cleaned_data['email']
+
+        user = self.request.user
+        if image:
+            info = UserInfos.objects.get(user=user)
+            if info.image:
+                os.remove(info.image.path)
+            info.image = image
+            info.save()
+        if email:
+            user.email = email
+            user.save()
+
+        return super().form_valid(form)
