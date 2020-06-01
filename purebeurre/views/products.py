@@ -203,18 +203,14 @@ class FindSubstituteView(ListView):
             a function to redirect to a specific url
         """
         if self.request.method == "POST":
-            if self.request.user.is_authenticated:
-                sub = self.request.POST['substitute']
-                substitute = Product.objects.get(pk=sub)
-                user = self.request.user
-                try:
-                    Favorite.objects.get(user=user, substitute=substitute)
-                except ObjectDoesNotExist:
-                    Favorite.objects.create(user=user, substitute=substitute)
-
-                return redirect('/')
-            else:
-                return redirect('/login/')
+            sub = self.request.POST['substitute']
+            substitute = Product.objects.get(pk=sub)
+            user = self.request.user
+            try:
+                Favorite.objects.get(user=user, substitute=substitute)
+            except ObjectDoesNotExist:
+                Favorite.objects.create(user=user, substitute=substitute)
+            return redirect('/')
 
 
 class FavoriteView(LoginRequiredMixin, ListView):
