@@ -1,4 +1,5 @@
 from purebeurre.models import Product, Category
+from django.core.exceptions import ObjectDoesNotExist
 import os
 import json
 import requests
@@ -36,18 +37,13 @@ def run():
     with open(json_path, 'r') as file:
         data = json.load(file)
 
-    categories_url = "https://fr.openfoodfacts.org/categorie/"
     print("Creating Category")
     for category in data['tags']:
         # Get the data wanted from json file
-        new_category = Category()
-        new_category.name = category['name']
-        new_category.tags = category['id']
-        new_category.url = categories_url + new_category.tags + ".json"
+        new_category = Category.objects.get(tags=category['id'])
         # Get the number of product available in this category ( can change )
         r = requests.get(new_category.url, headers=headers)
         new_category.products = r.json()["count"]
-
         new_category.save()
 
     categories = Category.objects.all()
@@ -74,31 +70,33 @@ def run():
             r = requests.get(search_url, headers=headers, params=payload)
             data = r.json()
             for product in data["products"]:
-                if not Product.objects.filter(code=str(product['code'])):
+                try:
+                    new_product = Product.objects.get(code=str(product['code']))
+                except ObjectDoesNotExist:
                     new_product = Product()
-                    new_product.name = str(check_error(product, 'product_name', ''))
-                    new_product.ingredients = check_error(product, 'ingredients_text_fr', '')
-                    new_product.url = product['url']
-                    new_product.img_url = check_error(product, 'image_small_url', '')
                     new_product.code = str(product['code'])
+                new_product.name = str(check_error(product, 'product_name', ''))
+                new_product.ingredients = check_error(product, 'ingredients_text_fr', '')
+                new_product.url = product['url']
+                new_product.img_url = check_error(product, 'image_small_url', '')
 
-                    new_product.store = check_error(product, 'stores', '')
-                    new_product.category = category
+                new_product.store = check_error(product, 'stores', '')
+                new_product.category = category
 
-                    new_product.nutrition_grade = check_error(product, 'nutrition_grades', '')
+                new_product.nutrition_grade = check_error(product, 'nutrition_grades', '')
 
-                    new_product.salt_100 = check_error(product, 'nutriments', 'salt_100g')
-                    new_product.salt_lvl = check_error(product, 'nutrient_levels', 'salt')
+                new_product.salt_100 = check_error(product, 'nutriments', 'salt_100g')
+                new_product.salt_lvl = check_error(product, 'nutrient_levels', 'salt')
 
-                    new_product.sugar_100 = check_error(product, 'nutriments', 'sugars_100g')
-                    new_product.sugar_lvl = check_error(product, 'nutrient_levels', 'sugars')
+                new_product.sugar_100 = check_error(product, 'nutriments', 'sugars_100g')
+                new_product.sugar_lvl = check_error(product, 'nutrient_levels', 'sugars')
 
-                    new_product.fat_100 = check_error(product, 'nutriments', 'fat_100g')
-                    new_product.fat_lvl = check_error(product, 'nutrient_levels', 'fat')
+                new_product.fat_100 = check_error(product, 'nutriments', 'fat_100g')
+                new_product.fat_lvl = check_error(product, 'nutrient_levels', 'fat')
 
-                    new_product.saturated_fat_100 = check_error(product, 'nutriments', 'saturated-fat_100g')
-                    new_product.saturated_fat_lvl = check_error(product, 'nutrient_levels', 'saturated-fat')
+                new_product.saturated_fat_100 = check_error(product, 'nutriments', 'saturated-fat_100g')
+                new_product.saturated_fat_lvl = check_error(product, 'nutrient_levels', 'saturated-fat')
 
-                    new_product.save()
+                new_product.save()
 
     print("\n Database is ready to be used")

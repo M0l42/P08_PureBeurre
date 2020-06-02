@@ -110,13 +110,20 @@ class SubstitutePageTestCase(TestCase):
         response = self.client.get(reverse('find_substitute', args=(product_id,)))
         self.assertQuerysetEqual(response.context['object_list'], ['<Product: test sub>'])
 
-    def test_save_favorite(self):
+    def test_save_favorite_logged_in(self):
         old_favorite = Favorite.objects.count()
         product_id = self.product.id
         self.client.login(username='testuser', password='12345')
         self.client.post(reverse('find_substitute', args=(product_id,)), {'substitute': self.substitute.id})
         new_favorite = Favorite.objects.count()
         self.assertEqual(new_favorite, old_favorite + 1)
+
+    def test_save_favorite_logged_off(self):
+        old_favorite = Favorite.objects.count()
+        product_id = self.product.id
+        self.client.post(reverse('find_substitute', args=(product_id,)), {'substitute': self.substitute.id})
+        new_favorite = Favorite.objects.count()
+        self.assertEqual(new_favorite, old_favorite)
 
 
 class FavoritePageTestCase(TestCase):
@@ -136,6 +143,10 @@ class FavoritePageTestCase(TestCase):
         self.client.login(username='testuser', password='12345')
         response = self.client.get(reverse('favorite'))
         self.assertQuerysetEqual(response.context['object_list'], ['<Favorite: test sub>'])
+
+    def test_search_substitute_page_302(self):
+        response = self.client.get(reverse('favorite'))
+        self.assertEqual(response.status_code, 302)
 
 
 class SignUpTestCase(TestCase):
@@ -185,3 +196,7 @@ class LogOffTestCase(TestCase):
         self.client.get(reverse('logout'))
         user = auth.get_user(self.client)
         assert not user.is_authenticated
+
+    def test_log_off_302(self):
+        response = self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
