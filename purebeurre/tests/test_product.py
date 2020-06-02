@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from purebeurre.models import Product, Category, Favorite
-from tests import create_testing_user
+from . import create_testing_user
 
 
 class ProductPageTestCase(TestCase):
