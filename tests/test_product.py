@@ -1,41 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib import auth
-from django.contrib.auth.models import User
-from .models import Product, Category, Favorite
-
-
-def create_testing_user(username='testuser', password='12345'):
-    user = User.objects.create(username=username)
-    user.set_password(password)
-    user.save()
-    return user
-
-
-class HomePageTestCase(TestCase):
-    def test_index_page(self):
-        response = self.client.get(reverse('home'))
-        self.assertEqual(response.status_code, 200)
-
-
-class LegalMentionsPageTestCase(TestCase):
-    def test_index_page(self):
-        response = self.client.get(reverse('legal_mentions'))
-        self.assertEqual(response.status_code, 200)
-
-
-class AccountPageTestCase(TestCase):
-    def setUp(self):
-        create_testing_user()
-
-    def test_index_page_returns_302(self):
-        response = self.client.get(reverse('account'))
-        self.assertEqual(response.status_code, 302)
-
-    def test_index_page_returns_200(self):
-        self.client.login(username='testuser', password='12345')
-        response = self.client.get(reverse('account'))
-        self.assertEqual(response.status_code, 200)
+from purebeurre.models import Product, Category, Favorite
+from tests import create_testing_user
 
 
 class ProductPageTestCase(TestCase):
@@ -112,69 +78,16 @@ class FavoritePageTestCase(TestCase):
         substitute = Product.objects.create(name="test sub", category=category, nutrition_grade="a")
         self.favorite = Favorite.objects.create(user=user, substitute=substitute)
 
-    def test_search_substitute_page_no_object(self):
+    def test_favorite_page_no_object(self):
         self.client.login(username='testuser no favorite', password='12345')
         response = self.client.get(reverse('favorite'))
         self.assertQuerysetEqual(response.context['object_list'], [])
 
-    def test_search_substitute_page_with_object(self):
+    def test_favorite_page_with_object(self):
         self.client.login(username='testuser', password='12345')
         response = self.client.get(reverse('favorite'))
         self.assertQuerysetEqual(response.context['object_list'], ['<Favorite: test sub>'])
 
-    def test_search_substitute_page_302(self):
+    def test_favorite_page_302(self):
         response = self.client.get(reverse('favorite'))
-        self.assertEqual(response.status_code, 302)
-
-
-class SignUpTestCase(TestCase):
-    def setUp(self):
-        self.form = {'username': "test",
-                     "first_name": "nathan",
-                     "last_name": "boukobza",
-                     "email": "email@email.com",
-                     "password": "123456"}
-
-    def test_sign_up_valid(self):
-        old_accounts = User.objects.count()
-        self.form["confirm_password"] = "123456"
-        self.client.post(reverse('sign_up'), self.form)
-        new_accounts = User.objects.count()
-        self.assertEqual(new_accounts, old_accounts + 1)
-
-    def test_sign_up_non_valid(self):
-        old_accounts = User.objects.count()
-        self.form["confirm_password"] = "abcde"
-        self.client.post(reverse('sign_up'), self.form)
-        new_accounts = User.objects.count()
-        self.assertEqual(new_accounts, old_accounts)
-
-
-class LogInTestCase(TestCase):
-    def setUp(self):
-        create_testing_user()
-
-    def test_log_in_success(self):
-        self.client.post(reverse('login'), {"username": "testuser", "password": "12345"})
-        user = auth.get_user(self.client)
-        assert user.is_authenticated
-
-    def test_log_in_failure(self):
-        self.client.post(reverse('login'), {"username": "testuser", "password": "123456"})
-        user = auth.get_user(self.client)
-        assert not user.is_authenticated
-
-
-class LogOffTestCase(TestCase):
-    def setUp(self):
-        create_testing_user()
-
-    def test_log_off(self):
-        self.client.login(username='testuser', password='12345')
-        self.client.get(reverse('logout'))
-        user = auth.get_user(self.client)
-        assert not user.is_authenticated
-
-    def test_log_off_302(self):
-        response = self.client.get(reverse('logout'))
         self.assertEqual(response.status_code, 302)
