@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import home_view, legal_mentions
 from .views.products import ProductView, ProductSearchView, FindSubstituteView, FavoriteView
-from .views.login import LogInFormView, SignUpFormView, LogOutView, AccountView, EditAccountFormView
+from .views.user import LogInFormView, SignUpFormView, LogOutView, AccountView, EditAccountFormView
 
 urlpatterns = [
     path('', home_view, name='home'),

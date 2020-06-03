@@ -78,18 +78,42 @@ class AccountPageTestCase(TestCase):
 
 class EditAccountPageTestCase(TestCase):
     def setUp(self):
-        UserInfos.objects.create(user=create_testing_user())
+        user_info = UserInfos.objects.create(user=create_testing_user())
         path = os.path.join(os.getcwd(), "purebeurre/tests/image_test.jpg")
-        self.image = SimpleUploadedFile(name='image_test.jpg', content=open(path, 'rb').read(), content_type='image/jpeg')
+        user_info.image = SimpleUploadedFile(name='image_test.jpg', content=open(path, 'rb').read(),
+                                             content_type='image/jpeg')
+        user_info.save()
+        self.image_jpg = SimpleUploadedFile(name='image_test_2.jpg', content=open(path, 'rb').read(),
+                                        content_type='image/jpeg')
+        self.image_png = SimpleUploadedFile(name='image_test.png', content=open(path, 'rb').read(),
+                                               content_type='image/png')
+
+    def delete_image(self):
+        self.client.login(username='testuser', password='12345', email="test@test.com")
+        user = auth.get_user(self.client)
+        user_info = UserInfos.objects.get(user=user)
+        os.remove(user_info.image.path)
 
     def test_index_page_returns_302(self):
         response = self.client.get(reverse('edit-account'))
         self.assertEqual(response.status_code, 302)
+        self.delete_image()
 
-    def test_index_page_returns_200(self):
+    def test_index_page_(self):
         self.client.login(username='testuser', password='12345', email="test@test.com")
-        self.client.post(reverse('edit-account'), {"email": "email@email.com", "image": self.image})
+        self.client.post(reverse('edit-account'), {"email": "email@email.com", "image": self.image_jpg})
         user = auth.get_user(self.client)
         user_info = UserInfos.objects.get(user=user)
+        image_name = os.path.basename(user_info.image.path)
         self.assertEqual(user.email, "email@email.com")
-        assert user_info.image
+        self.assertEqual(image_name, "testuser.jpg")
+        self.delete_image()
+
+    def test_index_page_png_image(self):
+        self.client.login(username='testuser', password='12345', email="test@test.com")
+        self.client.post(reverse('edit-account'), {"image": self.image_png})
+        user = auth.get_user(self.client)
+        user_info = UserInfos.objects.get(user=user)
+        image_name = os.path.basename(user_info.image.path)
+        self.assertEqual(image_name, "testuser.png")
+        self.delete_image()

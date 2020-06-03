@@ -247,8 +247,7 @@ class EditAccountFormView(LoginRequiredMixin, FormView):
         user = self.request.user
         if image:
             info = UserInfos.objects.get(user=user)
-            if info.image:
-                os.remove(info.image.path)
+            os.remove(info.image.path)
             info.image = image
             info.save()
         if email:

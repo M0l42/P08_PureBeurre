@@ -73,8 +73,8 @@ class Favorite(models.Model):
 
 def photo_path(instance, filename):
     basefilename, file_extension = os.path.splitext(filename)
-    return 'purebeurre/static/assets/img/users/{userid}.jpg'.format(
-        userid=instance.user.id, basename=basefilename)
+    return 'purebeurre/static/assets/img/users/{username}{file_extension}'.format(
+        username=instance.user.username, basename=basefilename, file_extension=file_extension)
 
 
 class UserInfos(models.Model):
