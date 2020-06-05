@@ -216,11 +216,43 @@ class LogOutView(LoginRequiredMixin, RedirectView):
 
 
 class AccountView(LoginRequiredMixin, View):
+    """
+    A class of LoginRequiredMixin and View to show the account Info
+
+    ...
+
+    Attributes
+    ----------
+    login_url : str
+        The url of the login page
+    template_name : str
+        the name of the template
+
+    Methods
+    -------
+    get(*args, **kwargs):
+        get the current user and his info
+    """
 
     login_url = '/login/'
     template_name = 'pure_beurre/account.html'
 
     def get(self, *args, **kwargs):
+        """
+        Log the user out
+
+        Parameters
+        ----------
+        args : str
+            Some argument that Django are passing
+        kwargs : str
+            Other argument that Django are passing
+
+        Returns
+        -------
+        render
+            a function that render the page with everything it need as the template name and it context
+        """
         context = dict()
         context['title'] = 'Account'
         context['user'] = self.request.user
@@ -232,17 +264,71 @@ class AccountView(LoginRequiredMixin, View):
 
 
 class EditAccountFormView(LoginRequiredMixin, FormView):
+    """
+    A class of LoginRequiredMixin and FormView to allow users to change some of theirs infos
+
+    ...
+
+    Attributes
+    ----------
+    login_url : str
+        The url of the login page
+    template_name : str
+        the name of the template
+    form_class : EditAccountForm
+        Form of the view
+    success_url : str
+        url of the success page
+
+    Methods
+    -------
+    get_context_data(**kwargs):
+        Get the context of the view
+    form_valid(form):
+        Change all the info the users filled
+
+    """
     login_url = '/login/'
     form_class = EditAccountForm
     template_name = 'pure_beurre/form.html'
     success_url = '/account/'
 
     def get_context_data(self, **kwargs):
+        """
+        Call the original method of the view and add the title on the context
+
+        Parameters
+        ----------
+        kwargs : str
+            Some argument that Django are passing, need when call the original method of the view
+
+        Returns
+        -------
+        dict
+            a dict of the context of the page
+        """
+
         context = super(EditAccountFormView, self).get_context_data(**kwargs)
         context['title'] = 'Edit Account'
         return context
 
     def form_valid(self, form):
+        """
+        Get all the data the user filled up
+        Change email if there's a new one
+        Change email if there's a new one, delete the old one
+
+        Parameters
+        ----------
+        form : Form
+            A form with the data filled by the user
+
+        Returns
+        -------
+        form_valid()
+            a function who render a page to the success url
+
+        """
         image = form.cleaned_data['image']
         email = form.cleaned_data['email']
 
