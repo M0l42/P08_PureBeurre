@@ -256,9 +256,12 @@ class AccountView(LoginRequiredMixin, View):
         context = dict()
         context['title'] = 'Account'
         context['user'] = self.request.user
-        context['user_info'] = UserInfos.objects.get(user=self.request.user)
-        _, file_extension = os.path.splitext(context['user_info'].image.name)
-        context['extension'] = file_extension
+        try:
+            context['user_info'] = UserInfos.objects.get(user=self.request.user)
+            _, file_extension = os.path.splitext(context['user_info'].image.name)
+            context['extension'] = file_extension
+        except ObjectDoesNotExist:
+            context['user_info'] = UserInfos.objects.create(user=self.request.user)
 
         return render(self.request, self.template_name, context=context)
 
@@ -334,8 +337,11 @@ class EditAccountFormView(LoginRequiredMixin, FormView):
 
         user = self.request.user
         if image:
-            info = UserInfos.objects.get(user=user)
-            os.remove(info.image.path)
+            try:
+                info = UserInfos.objects.get(user=user)
+                os.remove(info.image.path)
+            except ObjectDoesNotExist:
+                info = UserInfos.objects.create(user=user)
             info.image = image
             info.save()
         if email:
