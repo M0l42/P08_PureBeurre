@@ -217,7 +217,6 @@ class FindSubstituteView(ListView):
                 return redirect('/login/')
 
 
-
 class FavoriteView(LoginRequiredMixin, ListView):
     """
     A class of ListView to list into the page all the user's favorite product

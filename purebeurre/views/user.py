@@ -225,6 +225,8 @@ class AccountView(LoginRequiredMixin, View):
         context['title'] = 'Account'
         context['user'] = self.request.user
         context['user_info'] = UserInfos.objects.get(user=self.request.user)
+        _, file_extension = os.path.splitext(context['user_info'].image.name)
+        context['extension'] = file_extension
 
         return render(self.request, self.template_name, context=context)
 
