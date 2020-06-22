@@ -80,6 +80,7 @@ class EditAccountPageTestCase(TestCase):
     def setUp(self):
         user_info = UserInfos.objects.create(user=create_testing_user())
         self.path_dir_img = os.path.join(os.path.join(os.getcwd(), "purebeurre/static/assets/img/users"))
+
         path_file = os.path.join(os.getcwd(), "purebeurre/tests/image_test.jpg")
         user_info.image = SimpleUploadedFile(name='image_test.jpg', content=open(path_file, 'rb').read(),
                                              content_type='image/jpeg')
@@ -109,14 +110,18 @@ class EditAccountPageTestCase(TestCase):
 
     def test_edit_image(self):
         self.client.login(username='testuser', password='12345', email="test@test.com")
+
         old_number_files = len(
             [name for name in os.listdir(self.path_dir_img) if os.path.isfile(os.path.join(self.path_dir_img, name))])
+
         self.client.post(reverse('edit-account'), {"image": self.image_jpg})
         user = auth.get_user(self.client)
         user_info = UserInfos.objects.get(user=user)
         image_name = os.path.basename(user_info.image.path)
+
         new_number_files = len(
             [name for name in os.listdir(self.path_dir_img) if os.path.isfile(os.path.join(self.path_dir_img, name))])
+
         self.assertEqual(image_name, "testuser.jpg")
         self.assertEqual(old_number_files, new_number_files)
         self.delete_image()

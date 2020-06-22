@@ -91,3 +91,9 @@ class FavoritePageTestCase(TestCase):
     def test_favorite_page_302(self):
         response = self.client.get(reverse('favorite'))
         self.assertEqual(response.status_code, 302)
+
+
+
+
+
+

@@ -337,11 +337,8 @@ class EditAccountFormView(LoginRequiredMixin, FormView):
 
         user = self.request.user
         if image:
-            try:
-                info = UserInfos.objects.get(user=user)
-                os.remove(info.image.path)
-            except ObjectDoesNotExist:
-                info = UserInfos.objects.create(user=user)
+            info = UserInfos.objects.get(user=user)
+            os.remove(info.image.path)
             info.image = image
             info.save()
         if email:
