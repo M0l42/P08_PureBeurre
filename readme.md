@@ -21,7 +21,7 @@ This is set to use the default database of Django, but you're free to use your o
 
 Clone this repo 
 ```
-git clone https://github.com/M0l42/OC_P7_GrandpyBot.git
+git clone https://github.com/M0l42/P08_PureBeurre
 ```
 Create the virtualenv
 
